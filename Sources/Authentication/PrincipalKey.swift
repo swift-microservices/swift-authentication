@@ -5,7 +5,7 @@
 //  Created by Zaid Rahhawi on 9/11/26.
 //
 
-import ServiceContextModule
+public import ServiceContextModule
 
 /// The `ServiceContext` key under which a ``Principal`` of the current call is bound.
 ///

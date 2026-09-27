@@ -1,0 +1,2 @@
+API breakage: func Authenticator.authenticate(_:) is now with nonisolated
+API breakage: func CredentialIssuer.issue(for:) is now with nonisolated
