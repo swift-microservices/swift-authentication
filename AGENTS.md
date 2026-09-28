@@ -9,7 +9,7 @@ this before changing anything.
   `PrincipalKey`, all generic over the credential and the identity. It depends only on
   swift-service-context.
 - It knows no credential. A token is a `String`, a certificate is a `Certificate`, and both are
-  someone else's type. Proofs (swift-authentication-jwt, -x509) and transports
+  someone else's type. Proofs (swift-authentication-jwt, -spiffe) and transports
   (swift-authentication-grpc, -hummingbird, -vapor) are separate packages that depend on this
   one by tag.
 - Nothing is named by who presented a credential. There is no "user" here: whether an identity
