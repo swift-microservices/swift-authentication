@@ -29,10 +29,11 @@ routes such as signing in have no caller yet. Requiring a caller is the handler'
 
 ## An identity is not a person
 
-Whether a token names a person or a process is a claim inside the identity. Workers authenticate
-as a service with a token; people authenticate with one too. Nothing here says "user", and
-nothing reads the claims. Roles travel in the identity and the application decides what they
-permit.
+Whether a principal is a person or a process is the application's reading of the identity, not
+this module's. A person usually presents a token; a worker or a service calling with no person
+behind it presents its certificate, and is named by it rather than by a token of its own.
+Nothing here says "user", and nothing reads the claims. Roles travel in the identity and the
+application decides what they permit.
 
 ## Two principals on one call
 
