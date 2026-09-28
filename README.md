@@ -3,7 +3,7 @@
 Who is calling, proved by a credential, and carried with the call.
 
 ```swift
-.package(url: "https://github.com/swift-microservices/swift-authentication.git", from: "0.1.0"),
+.package(url: "https://github.com/swift-microservices/swift-authentication.git", from: "0.2.0"),
 ```
 
 ```swift
