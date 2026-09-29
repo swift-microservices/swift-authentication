@@ -10,7 +10,7 @@ mints one, and the result is a ``Principal``, the identity together with the cre
 under ``PrincipalKey`` in the task's `ServiceContext` for the length of a call.
 
 It knows no credential. A bearer token is a `String` proved by swift-authentication-jwt; a
-certificate is proved by swift-authentication-spiffe. Where a credential is read from, and where
+certificate is proved by swift-authentication-x509. Where a credential is read from, and where
 the principal is bound, is a transport package: swift-authentication-grpc,
 swift-authentication-hummingbird, swift-authentication-vapor.
 

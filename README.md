@@ -30,7 +30,7 @@ person or a process is a claim inside it; the package never reads the claims.
 | Package | Adds | Depends on |
 | --- | --- | --- |
 | swift-authentication-jwt | `JWTAuthenticator`, `JWTIssuer`: a bearer token as a JSON Web Token | jwt-kit |
-| swift-authentication-spiffe | `SPIFFEAuthenticator`, `SPIFFEID`, `SPIFFETrustBundle`: full X.509-SVID verification | swift-certificates |
+| swift-authentication-x509 | `WorkloadIdentity`, `WorkloadCertificateAuthenticator`: HTTPS workload identity behind native mTLS | swift-certificates |
 | swift-authentication-grpc | interceptors that read a bearer token or the peer certificate, bind the principal, and present the token onward | grpc-swift-2 |
 | swift-authentication-hummingbird | the bearer middleware for Hummingbird | hummingbird-auth |
 | swift-authentication-vapor | the bearer middleware for Vapor | vapor |
