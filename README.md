@@ -50,14 +50,6 @@ a caller is the handler's decision. Looking up a principal in `ServiceContext` r
 because a call may carry no credential. Permission to perform an operation is the application's
 decision after authentication.
 
-## Migrating authenticators
-
-As of 0.3.0, `authenticate(_:)` returns `Identity`, rather than `Identity?`. Custom conformers must return
-an identity on success and throw when a presented credential cannot establish one. Remove
-optional unwrapping around successful results. A former `nil` result now fails authentication
-under the supplied transports; anonymous continuation or trying another authenticator requires
-an explicit application policy.
-
 ## Reading the caller
 
 `ServiceContext` is the one task-local the server ecosystem shares: tracing puts spans in it, a

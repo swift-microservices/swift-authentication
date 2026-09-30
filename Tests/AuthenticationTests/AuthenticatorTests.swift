@@ -29,7 +29,7 @@ struct AuthenticatorTests {
 
     let authenticator: any Authenticator<String, Claims> = TokenAuthenticator()
 
-    @Test("Authenticating through the protocol returns an identity without optional unwrapping")
+    @Test("Authenticating through the protocol returns an identity")
     func returnsIdentity() async throws {
         let identity: Claims = try await authenticator.authenticate("alice-token")
 
