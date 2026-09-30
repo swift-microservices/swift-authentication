@@ -3,7 +3,7 @@
 Who is calling, proved by a credential, and carried with the call.
 
 ```swift
-.package(url: "https://github.com/swift-microservices/swift-authentication.git", from: "0.2.0"),
+.package(url: "https://github.com/swift-microservices/swift-authentication.git", from: "0.3.0"),
 ```
 
 ```swift
@@ -17,7 +17,7 @@ follows one path, and this package is that path with the credential left generic
 
 | Type | Role |
 | --- | --- |
-| `Authenticator<Credential, Identity>` | turns a credential into the identity it proves, declines with `nil`, or refuses by throwing |
+| `Authenticator<Credential, Identity>` | turns a presented credential into the identity it proves, or throws if authentication fails |
 | `CredentialIssuer<Identity, Credential>` | mints the credential that proves an identity; one process holds the private key |
 | `Principal<Identity, Credential>` | the party a credential proved: the identity, and the credential itself |
 | `PrincipalKey<Identity, Credential>` | the `ServiceContext` key a transport binds the principal under for the length of a call |
@@ -38,13 +38,25 @@ person or a process is a claim inside it; the package never reads the claims.
 A proof package knows how to check a credential. A transport package knows where to find one and
 where to bind the result. Neither knows about the other.
 
-## Three answers
+## Authenticating a credential
 
-An authenticator answers one of three ways. An identity binds a principal. `nil` declines: the
-credential names nobody this service recognises, and the call continues unbound. A throw refuses:
-the credential does not verify, and the call fails as unauthenticated. A call with no credential
-never reaches the authenticator and continues anonymously; requiring a caller is the handler's
-decision.
+An authenticator returns an identity or throws. A successful return establishes the identity a
+transport binds as a principal. A failed authentication throws, including when a certificate
+cannot establish an identity in the configured trust domain. The supplied transports translate
+authentication failures into their unauthenticated response.
+
+A call with no credential never reaches the authenticator and continues anonymously; requiring
+a caller is the handler's decision. Looking up a principal in `ServiceContext` remains optional
+because a call may carry no credential. Permission to perform an operation is the application's
+decision after authentication.
+
+## Migrating authenticators
+
+As of 0.3.0, `authenticate(_:)` returns `Identity`, rather than `Identity?`. Custom conformers must return
+an identity on success and throw when a presented credential cannot establish one. Remove
+optional unwrapping around successful results. A former `nil` result now fails authentication
+under the supplied transports; anonymous continuation or trying another authenticator requires
+an explicit application policy.
 
 ## Reading the caller
 

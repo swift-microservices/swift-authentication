@@ -13,19 +13,20 @@ turns it into an identity. The identity and the credential become a ``Principal`
 ``PrincipalKey`` for the length of the call. This module is that path with the credential left
 generic; the proof and transport packages fill it in.
 
-## Three answers
+## An identity or an error
 
-An authenticator answers one of three ways, and the transports treat them differently:
+An authenticator receives a presented credential and either returns an identity or throws:
 
 - **An identity** binds a principal.
-- **`nil`** declines. The credential names nobody this service recognises, such as a certificate
-  from another trust domain. The call continues unbound, because a valid credential this service
-  does not admit is not an error.
-- **A throw** refuses. The credential was presented and does not verify. The call fails as
-  unauthenticated, because absent and invalid are not the same thing.
+- **A throw** means authentication could not establish an accepted identity. The supplied
+  transports fail the call as unauthenticated. This includes a certificate with no identity in
+  the configured trust domain, even when the certificate passed TLS validation.
 
 A call with no credential at all never reaches the authenticator and continues anonymously; open
 routes such as signing in have no caller yet. Requiring a caller is the handler's decision.
+The principal lookup remains optional for these calls. An application that intentionally
+continues after failed authentication, or tries another authenticator, must make that policy
+explicit outside this protocol.
 
 ## An identity is not a person
 

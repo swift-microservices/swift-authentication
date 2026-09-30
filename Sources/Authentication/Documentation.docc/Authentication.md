@@ -9,6 +9,10 @@ more: an ``Authenticator`` turns a credential into the identity it proves, a ``C
 mints one, and the result is a ``Principal``, the identity together with the credential, bound
 under ``PrincipalKey`` in the task's `ServiceContext` for the length of a call.
 
+Authentication receives a presented credential and returns an identity or throws. A call with
+no credential never reaches the authenticator; requiring an identity is the application's
+decision, as is deciding what an authenticated identity may do.
+
 It knows no credential. A bearer token is a `String` proved by swift-authentication-jwt; a
 certificate is proved by swift-authentication-x509. Where a credential is read from, and where
 the principal is bound, is a transport package: swift-authentication-grpc,

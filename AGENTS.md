@@ -14,8 +14,10 @@ this before changing anything.
   one by tag.
 - Nothing is named by who presented a credential. There is no "user" here: whether an identity
   is a person or a process is a claim the application reads.
-- An authenticator has three answers, and the meaning is fixed: an identity binds, `nil`
-  declines and the call continues unbound, a throw refuses and the call fails.
+- An authenticator receives a presented credential and returns an identity or throws. It never
+  declines with `nil`. Transports bind successful identities and translate authentication
+  failures; whether a call requires a caller is the application's decision. A call with no
+  credential never reaches the authenticator.
 
 ## What does not belong here
 
