@@ -1,2 +1,3 @@
 API breakage: func Authenticator.authenticate(_:) is now with nonisolated
+API breakage: func Authenticator.authenticate(_:) has return type change from Self.Identity? to Self.Identity
 API breakage: func CredentialIssuer.issue(for:) is now with nonisolated
