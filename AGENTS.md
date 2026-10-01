@@ -6,25 +6,25 @@ this before changing anything.
 ## What this package is
 
 - One product, `Authentication`: `Authenticator`, `CredentialIssuer`, `Principal`, and
-  `PrincipalKey`, all generic over the credential and the identity. It depends only on
-  swift-service-context.
-- It knows no credential. A token is a `String`, a certificate is a `Certificate`, and both are
-  someone else's type. Proofs (swift-authentication-jwt, -x509) and transports
-  (swift-authentication-grpc, -hummingbird, -vapor) are separate packages that depend on this
-  one by tag.
-- Nothing is named by who presented a credential. There is no "user" here: whether an identity
-  is a person or a process is a claim the application reads.
-- An authenticator receives a presented credential and returns an identity or throws.
-  Transports bind successful identities and translate authentication failures; whether a call
-  requires a caller is the application's decision. A call with no credential never reaches the
-  authenticator.
+  `PrincipalKey`, generic over credential and identity. It depends only on swift-service-context.
+- It knows no concrete credential or claims. swift-authentication-jwt proves user JWTs;
+  swift-authentication-grpc, -hummingbird, and -vapor read bearer credentials and bind the
+  resulting principal. These packages depend on this one by tag.
+- `Authenticator.authenticate(_:) async throws -> Identity` returns a concrete identity or
+  throws. Transports bind successful identities and translate authentication failures. A call
+  with no credential never reaches the authenticator.
+- User handlers require an identity, and owning use cases check user permissions and resource
+  access. User principals and user database settings apply to user operations.
+- Internal service and worker RPCs use mandatory transport mTLS and accept business input
+  directly. Their use cases enforce business invariants. Public operations check their
+  required credentials or proofs. Keep these audiences explicit in transport descriptors.
 
 ## What does not belong here
 
-- A concrete credential: a token type, a certificate type, a key type, a crypto dependency.
-- Reading claims, roles, or permissions. The application decides what a principal may do.
-- Anything about how a credential travels. Each transport package reads it with its own
-  framework's types.
+- Concrete credentials, cryptography, token claims, roles, or permission policies.
+- Transport configuration or certificate lifecycle. Composition roots configure explicit mTLS
+  trust and run certificate reloaders with transports; deployments issue and renew certificates.
+- Reading headers or metadata. Each transport package reads its framework's types.
 
 ## Swift
 

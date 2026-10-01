@@ -11,8 +11,7 @@ public import ServiceContextModule
 ///
 /// A transport binds it for the length of a call; a handler reads it without threading the
 /// caller through every signature. The key is generic over both the identity and the credential,
-/// so a call that carried two credentials, a service relaying a person's call arrives with its
-/// own certificate and the person's token, binds two principals that never collide.
+/// so bindings with different identity or credential types remain independent.
 ///
 /// An application usually spells the lookup once:
 ///

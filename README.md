@@ -12,8 +12,8 @@ Who is calling, proved by a credential, and carried with the call.
 
 ## The shape
 
-A caller proves who they are with a credential: a bearer token, a certificate. Every credential
-follows one path, and this package is that path with the credential left generic:
+An authenticator proves a presented credential and returns its identity. This package defines
+that contract with the credential and identity left generic:
 
 | Type | Role |
 | --- | --- |
@@ -22,16 +22,14 @@ follows one path, and this package is that path with the credential left generic
 | `Principal<Identity, Credential>` | the party a credential proved: the identity, and the credential itself |
 | `PrincipalKey<Identity, Credential>` | the `ServiceContext` key a transport binds the principal under for the length of a call |
 
-It depends on nothing but swift-service-context and knows no credential. Whether an identity is a
-person or a process is a claim inside it; the package never reads the claims.
+It depends only on swift-service-context and knows no concrete credential or claims.
 
 ## The family
 
 | Package | Adds | Depends on |
 | --- | --- | --- |
 | swift-authentication-jwt | `JWTAuthenticator`, `JWTIssuer`: a bearer token as a JSON Web Token | jwt-kit |
-| swift-authentication-x509 | `SPIFFEAuthenticator`, `SPIFFEID`: a certificate by its SPIFFE name | swift-certificates |
-| swift-authentication-grpc | interceptors that read a bearer token or the peer certificate, bind the principal, and present the token onward | grpc-swift-2 |
+| swift-authentication-grpc | user bearer authentication and propagation on user RPC descriptors | grpc-swift-2 |
 | swift-authentication-hummingbird | the bearer middleware for Hummingbird | hummingbird-auth |
 | swift-authentication-vapor | the bearer middleware for Vapor | vapor |
 
@@ -41,16 +39,22 @@ where to bind the result. Neither knows about the other.
 ## Authenticating a credential
 
 An authenticator returns an identity or throws. A successful return establishes the identity a
-transport binds as a principal. A failed authentication throws, including when a certificate
-cannot establish an identity in the configured trust domain. The supplied transports translate
-authentication failures into their unauthenticated response.
+transport binds as a principal. A failed authentication throws. The supplied transports
+translate authentication failures into their unauthenticated response.
 
 A call with no credential never reaches the authenticator and continues anonymously; requiring
 a caller is the handler's decision. Looking up a principal in `ServiceContext` remains optional
 because a call may carry no credential. Permission to perform an operation is the application's
 decision after authentication.
 
-## Reading the caller
+## Security model
+
+mTLS secures service-to-service connections. User JWTs authenticate the user making a request;
+each receiving service verifies the original token, and the owning use case checks permissions.
+User principals and database settings are scoped to user operations. Internal operations accept
+business input and enforce domain invariants.
+
+## Reading the user
 
 `ServiceContext` is the one task-local the server ecosystem shares: tracing puts spans in it, a
 `Logger.MetadataProvider` reads it for every log line, and the transports carry it. Binding the
