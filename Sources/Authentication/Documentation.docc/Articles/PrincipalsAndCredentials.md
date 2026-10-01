@@ -1,44 +1,28 @@
 # Principals and credentials
 
-One shape for every credential, named by what was presented, never by who presented it.
+Carry a verified user identity and its original credential through a request.
 
-## Two credentials, one shape
+## Authentication and binding
 
-A call can carry two kinds of proof. A token, in the `Authorization` metadata or header,
-verified by a key the process holds. A certificate, presented at the TLS handshake and verified
-by the transport before any byte of the request is read.
+An ``Authenticator`` receives a presented credential and returns a concrete identity or throws.
+The transport binds that identity and credential as a ``Principal`` under ``PrincipalKey`` in
+`ServiceContext` for the call. Retaining the credential allows forwarding clients to present the
+original token to the next service.
 
-Both follow the same path. Something reads the credential off the call. An ``Authenticator``
-turns it into an identity. The identity and the credential become a ``Principal``, bound under a
-``PrincipalKey`` for the length of the call. This module is that path with the credential left
-generic; the proof and transport packages fill it in.
+The protocol is generic over credential and identity. Supplied transports translate
+verification failures into their unauthenticated response. A missing credential continues
+unbound; user handlers require an identity before invoking the owning use case.
 
-## An identity or an error
+## Security boundaries
 
-An authenticator receives a presented credential and either returns an identity or throws:
+mTLS secures service-to-service connections. User JWTs authenticate users, and each receiving
+service verifies the original token with the issuer's public key and the required claim checks.
+The owning use case authorizes the user operation. User principals and database settings are
+scoped to user descriptors; internal operations accept business input and enforce domain
+invariants.
 
-- **An identity** binds a principal.
-- **A throw** means authentication could not establish an accepted identity. The supplied
-  transports fail the call as unauthenticated. This includes a certificate with no identity in
-  the configured trust domain, even when the certificate passed TLS validation.
+## Context scope
 
-A call with no credential at all never reaches the authenticator and continues anonymously; open
-routes such as signing in have no caller yet. Requiring a caller is the handler's decision.
-The principal lookup remains optional for these calls. An application that intentionally
-continues after failed authentication, or tries another authenticator, must make that policy
-explicit outside this protocol.
-
-## An identity is not a person
-
-Whether a principal is a person or a process is the application's reading of the identity, not
-this module's. A person usually presents a token; a worker or a service calling with no person
-behind it presents its certificate, and is named by it rather than by a token of its own.
-Nothing here says "user", and nothing reads the claims. Roles travel in the identity and the
-application decides what they permit.
-
-## Two principals on one call
-
-A service relaying a person's call arrives with its own certificate and the person's token. The
-key is generic over both the identity and the credential, so the two principals are bound
-independently and a handler can ask either question: which process is calling, and on whose
-behalf.
+``PrincipalKey`` includes the identity and credential types, so differently typed bindings
+remain independent. Transports preserve existing tracing and context values and restore the
+enclosing principal when the request scope ends.

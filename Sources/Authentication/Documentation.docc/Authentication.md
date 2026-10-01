@@ -13,10 +13,10 @@ Authentication receives a presented credential and returns an identity or throws
 no credential never reaches the authenticator; requiring an identity is the application's
 decision, as is deciding what an authenticated identity may do.
 
-It knows no credential. A bearer token is a `String` proved by swift-authentication-jwt; a
-certificate is proved by swift-authentication-x509. Where a credential is read from, and where
-the principal is bound, is a transport package: swift-authentication-grpc,
-swift-authentication-hummingbird, swift-authentication-vapor.
+The credential and identity remain generic. swift-authentication-jwt verifies user tokens;
+gRPC, Hummingbird, and Vapor adapters bind the resulting principal. mTLS secures service
+connections, and user JWTs authenticate users. User handlers require the identity and pass it to
+the owning use case for authorization. Internal operations accept business input directly.
 
 ## Example
 

@@ -7,12 +7,12 @@
 
 /// Turns a presented credential into the identity it proves.
 ///
-/// A credential is whatever a call carried: a bearer token, a certificate. An authenticator knows
-/// one kind, and either returns the identity it establishes or throws:
+/// The credential and identity are generic. An authenticator knows one credential kind and
+/// either returns the identity it establishes or throws:
 ///
 /// - **An identity.** The credential proved it, and the transport binds a ``Principal``.
 /// - **A throw.** Authentication could not establish an accepted identity: a bad signature, an
-///   expired claim, or a certificate with no identity in the configured trust domain.
+///   expired claim, or another invalid proof.
 ///
 /// Where the credential is read from, and where the identity is bound, is a transport's
 /// business. A call with no credential never reaches the authenticator. Whether a call requires
