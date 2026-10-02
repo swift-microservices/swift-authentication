@@ -1,11 +1,10 @@
 # ``Authentication``
 
-Who is calling, proved by a credential, and carried with the call.
+Authenticate credentials and carry verified identities through a request.
 
 ## Overview
 
-A caller proves who they are with a credential. This module is the shape of that, and nothing
-more: an ``Authenticator`` turns a credential into the identity it proves, a ``CredentialIssuer``
+An ``Authenticator`` turns a credential into the identity it proves, a ``CredentialIssuer``
 mints one, and the result is a ``Principal``, the identity together with the credential, bound
 under ``PrincipalKey`` in the task's `ServiceContext` for the length of a call.
 
@@ -40,7 +39,7 @@ A test that needs a bound caller uses the standard API:
 ```swift
 var context = ServiceContext.topLevel
 context[PrincipalKey<AppToken, String>.self] = Principal(identity: token, credential: "-")
-try await ServiceContext.withValue(context) { try await useCase(input: input) }
+try await ServiceContext.withValue(context) { try await handler(request) }
 ```
 
 ## Topics
