@@ -1,9 +1,6 @@
-//
-//  CredentialIssuer.swift
-//  swift-authentication
-//
-//  Created by Zaid Rahhawi on 9/11/26.
-//
+// Copyright (c) 2026 Zaid Rahhawi
+// SPDX-License-Identifier: MIT
+// See LICENSE for license information.
 
 /// Mints the credential that proves an identity.
 ///
