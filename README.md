@@ -1,5 +1,7 @@
 # swift-authentication
 
+[![Documentation](https://img.shields.io/badge/docc-read_documentation-blue)](https://swiftpackageindex.com/swift-microservices/swift-authentication/documentation)
+
 Who is calling, proved by a credential, and carried with the call.
 
 ```swift
