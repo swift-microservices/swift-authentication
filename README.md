@@ -38,6 +38,10 @@ It depends only on swift-service-context and knows no concrete credential or cla
 A proof package knows how to check a credential. A transport package knows where to find one and
 where to bind the result. Neither knows about the other.
 
+On the client side, [swift-openapi-token-authentication](https://github.com/swift-microservices/swift-openapi-token-authentication)
+signs in, refreshes, and presents the bearer token for apps and SDKs calling a Swift OpenAPI
+surface. It does not depend on this package.
+
 ## Authenticating a credential
 
 An authenticator returns an identity or throws. A successful return establishes the identity a
@@ -87,7 +91,7 @@ try await ServiceContext.withValue(context) { try await useCase(input: input) }
 
 ## Requirements
 
-Swift 6.3, macOS 15 or Linux.
+Swift 6.3, macOS 15 or Linux. swift-service-context 1.3.
 
 ## Development
 
