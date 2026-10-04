@@ -14,6 +14,11 @@ public struct Principal<Identity: Sendable, Credential: Sendable>: Sendable {
     /// What proved it, as presented.
     public let credential: Credential
 
+    /// A principal of `identity`, proved by `credential`.
+    ///
+    /// - Parameters:
+    ///   - identity: The identity the authenticator returned.
+    ///   - credential: The credential as presented, kept so it can be forwarded unchanged.
     public init(identity: Identity, credential: Credential) {
         self.identity = identity
         self.credential = credential
