@@ -31,13 +31,13 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-service-context.git", from: "1.3.0")
+        .package(url: "https://github.com/swift-microservices/swift-operation-context.git", from: "0.1.0")
     ],
     targets: [
         .target(
             name: "Authentication",
             dependencies: [
-                .product(name: "ServiceContextModule", package: "swift-service-context")
+                .product(name: "OperationContext", package: "swift-operation-context")
             ],
             swiftSettings: swiftSettings
         ),
@@ -45,7 +45,7 @@ let package = Package(
             name: "AuthenticationTests",
             dependencies: [
                 .target(name: "Authentication"),
-                .product(name: "ServiceContextModule", package: "swift-service-context"),
+                .product(name: "OperationContext", package: "swift-operation-context"),
             ],
             swiftSettings: swiftSettings
         ),

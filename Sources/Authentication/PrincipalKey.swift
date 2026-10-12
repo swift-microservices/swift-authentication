@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: MIT
 // See LICENSE for license information.
 
-public import ServiceContextModule
+public import OperationContext
 
-/// The `ServiceContext` key under which a ``Principal`` of the current call is bound.
+/// The `OperationContext` key under which a ``Principal`` of the current call is bound.
 ///
 /// A transport binds it for the length of a call; a handler reads it without threading the
 /// caller through every signature. The key is generic over both the identity and the credential,
@@ -13,14 +13,12 @@ public import ServiceContextModule
 /// An application usually spells the lookup once:
 ///
 /// ```swift
-/// extension ServiceContext {
+/// extension OperationContext {
 ///     var caller: Principal<AppToken, String>? {
 ///         self[PrincipalKey<AppToken, String>.self]
 ///     }
 /// }
 /// ```
-public enum PrincipalKey<Identity: Sendable, Credential: Sendable>: ServiceContextKey {
+public enum PrincipalKey<Identity: Sendable, Credential: Sendable>: OperationContextKey {
     public typealias Value = Principal<Identity, Credential>
-
-    public static var nameOverride: String? { "principal" }
 }

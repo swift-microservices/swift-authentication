@@ -6,7 +6,7 @@ this before changing anything.
 ## What this package is
 
 - One product, `Authentication`: `Authenticator`, `CredentialIssuer`, `Principal`, and
-  `PrincipalKey`, generic over credential and identity. It depends only on swift-service-context.
+  `PrincipalKey`, generic over credential and identity. It depends only on swift-operation-context.
 - It knows no concrete credential or claims. swift-authentication-jwt proves user JWTs;
   swift-authentication-grpc, -hummingbird, and -vapor read bearer credentials and bind the
   resulting principal. These packages depend on this one by tag.
@@ -30,7 +30,7 @@ this before changing anything.
 
 - Swift 6.3, strict concurrency, `Sendable` everywhere it is meaningful.
 - Tests use Swift Testing. The key is proven by binding and reading principals through
-  `ServiceContext`, including two on one call.
+  `OperationContext`, including two on one call.
 - Doc comments on every public declaration; the DocC catalog is the long-form explanation.
 - Use the checked-in `.swift-format`, copied exactly from apple/swift-temporal-sdk at
   `508797b5468dbc532f77c317bf9df0cb3231f5c1`: four-space indentation, 150-column lines,

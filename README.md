@@ -5,7 +5,7 @@
 Who is calling, proved by a credential, and carried with the call.
 
 ```swift
-.package(url: "https://github.com/swift-microservices/swift-authentication.git", from: "0.3.0"),
+.package(url: "https://github.com/swift-microservices/swift-authentication.git", from: "0.4.0"),
 ```
 
 ```swift
@@ -22,9 +22,9 @@ that contract with the credential and identity left generic:
 | `Authenticator<Credential, Identity>` | turns a presented credential into the identity it proves, or throws if authentication fails |
 | `CredentialIssuer<Identity, Credential>` | mints the credential that proves an identity; one process holds the private key |
 | `Principal<Identity, Credential>` | the party a credential proved: the identity, and the credential itself |
-| `PrincipalKey<Identity, Credential>` | the `ServiceContext` key a transport binds the principal under for the length of a call |
+| `PrincipalKey<Identity, Credential>` | the `OperationContext` key a transport binds the principal under for the length of a call |
 
-It depends only on swift-service-context and knows no concrete credential or claims.
+It depends only on swift-operation-context and knows no concrete credential or claims.
 
 ## The family
 
@@ -49,7 +49,7 @@ transport binds as a principal. A failed authentication throws. The supplied tra
 translate authentication failures into their unauthenticated response.
 
 A call with no credential never reaches the authenticator and continues anonymously; requiring
-a caller is the handler's decision. Looking up a principal in `ServiceContext` remains optional
+a caller is the handler's decision. Looking up a principal in `OperationContext` remains optional
 because a call may carry no credential. Permission to perform an operation is the application's
 decision after authentication.
 
@@ -62,13 +62,13 @@ business input and enforce domain invariants.
 
 ## Reading the user
 
-`ServiceContext` is the one task-local the server ecosystem shares: tracing puts spans in it, a
-`Logger.MetadataProvider` reads it for every log line, and the transports carry it. Binding the
-principal there means the caller can appear in every log line of a request without the app
-wiring anything. An app usually spells the lookup once:
+[swift-operation-context](https://github.com/swift-microservices/swift-operation-context)
+carries typed values for the current operation. Transports bind a principal around their
+continuation; structured child tasks inherit it, and the previous context is restored when
+the scope exits. An app usually spells the lookup once:
 
 ```swift
-extension ServiceContext {
+extension OperationContext {
     var caller: Principal<AppToken, String>? {
         self[PrincipalKey<AppToken, String>.self]
     }
@@ -76,22 +76,22 @@ extension ServiceContext {
 ```
 
 ```swift
-guard let caller = ServiceContext.current?.caller?.identity else {
+guard let caller = OperationContext.current.caller?.identity else {
     throw RPCError(code: .unauthenticated, message: "Sign in to continue.")
 }
 ```
 
-A use-case test that needs a bound caller uses the standard API:
+A handler test can bind a principal explicitly:
 
 ```swift
-var context = ServiceContext.topLevel
+var context = OperationContext()
 context[PrincipalKey<AppToken, String>.self] = Principal(identity: token, credential: "-")
-try await ServiceContext.withValue(context) { try await useCase(input: input) }
+try await OperationContext.withContext(context) { try await handler(request) }
 ```
 
 ## Requirements
 
-Swift 6.3, macOS 15 or Linux. swift-service-context 1.3.
+Swift 6.3, macOS 15 or Linux. swift-operation-context 0.1.
 
 ## Development
 
