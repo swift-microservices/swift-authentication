@@ -6,7 +6,7 @@ Authenticate credentials and carry verified identities through a request.
 
 An ``Authenticator`` turns a credential into the identity it proves, a ``CredentialIssuer``
 mints one, and the result is a ``Principal``, the identity together with the credential, bound
-under ``PrincipalKey`` in the task's `ServiceContext` for the length of a call.
+under ``PrincipalKey`` in the task's `OperationContext` for the length of a call.
 
 Authentication receives a presented credential and returns an identity or throws. A call with
 no credential never reaches the authenticator; requiring an identity is the application's
@@ -23,13 +23,13 @@ A transport binds the principal; a handler reads it. An application usually spel
 once:
 
 ```swift
-extension ServiceContext {
+extension OperationContext {
     var caller: Principal<AppToken, String>? {
         self[PrincipalKey<AppToken, String>.self]
     }
 }
 
-guard let caller = ServiceContext.current?.caller?.identity else {
+guard let caller = OperationContext.current.caller?.identity else {
     throw RPCError(code: .unauthenticated, message: "Sign in to continue.")
 }
 ```
@@ -37,9 +37,9 @@ guard let caller = ServiceContext.current?.caller?.identity else {
 A test that needs a bound caller uses the standard API:
 
 ```swift
-var context = ServiceContext.topLevel
+var context = OperationContext()
 context[PrincipalKey<AppToken, String>.self] = Principal(identity: token, credential: "-")
-try await ServiceContext.withValue(context) { try await handler(request) }
+try await OperationContext.withContext(context) { try await handler(request) }
 ```
 
 ## Topics
