@@ -31,7 +31,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-microservices/swift-operation-context.git", from: "0.1.0")
+        .package(url: "https://github.com/swift-microservices/swift-operation-context.git", from: "1.0.0")
     ],
     targets: [
         .target(
