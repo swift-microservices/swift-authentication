@@ -5,7 +5,7 @@
 Who is calling, proved by a credential, and carried with the call.
 
 ```swift
-.package(url: "https://github.com/swift-microservices/swift-authentication.git", from: "0.4.0"),
+.package(url: "https://github.com/swift-microservices/swift-authentication.git", from: "1.0.0"),
 ```
 
 ```swift
@@ -91,7 +91,7 @@ try await OperationContext.withContext(context) { try await handler(request) }
 
 ## Requirements
 
-Swift 6.3, macOS 15 or Linux. swift-operation-context 0.1.
+Swift 6.3, macOS 15 or Linux. swift-operation-context 1.0.
 
 ## Development
 
