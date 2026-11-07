@@ -78,9 +78,9 @@ business input and enforce domain invariants.
 | [swift-authentication-hummingbird](https://github.com/swift-microservices/swift-authentication-hummingbird) | `BearerAuthenticationMiddleware`: the same for Hummingbird, on hummingbird-auth |
 | [swift-authentication-grpc](https://github.com/swift-microservices/swift-authentication-grpc) | `BearerAuthenticationInterceptor` and `BearerPropagationInterceptor`: authenticate user RPCs and forward the token, on grpc-swift-2 |
 
-On the client side, [swift-openapi-token-authentication](https://github.com/swift-microservices/swift-openapi-token-authentication)
-signs in, refreshes, and presents the bearer token for apps and SDKs calling a Swift OpenAPI
-surface. It does not depend on this package.
+On the client side, [swift-token-authentication](https://github.com/swift-microservices/swift-token-authentication)
+signs in, refreshes, and presents the bearer token for apps and SDKs calling a Swift API, with a
+middleware for generated OpenAPI clients. It does not depend on this package.
 
 ## 🏁 Getting Started
 
