@@ -8,7 +8,7 @@ this before changing anything.
 - One product, `Authentication`: `Authenticator`, `CredentialIssuer`, `Principal`, and
   `PrincipalKey`, generic over credential and identity. It depends only on swift-operation-context.
 - It knows no concrete credential or claims. swift-authentication-jwt proves user JWTs;
-  swift-authentication-grpc, -hummingbird, and -vapor read bearer credentials and bind the
+  swift-authentication-grpc and -hummingbird read bearer credentials and bind the
   resulting principal. These packages depend on this one by tag.
 - `Authenticator.authenticate(_:) async throws -> Identity` returns a concrete identity or
   throws. Transports bind successful identities and translate authentication failures. A call
