@@ -13,7 +13,7 @@ no credential never reaches the authenticator; requiring an identity is the appl
 decision, as is deciding what an authenticated identity may do.
 
 The credential and identity remain generic. swift-authentication-jwt verifies user tokens;
-gRPC, Hummingbird, and Vapor adapters bind the resulting principal. mTLS secures service
+gRPC and Hummingbird adapters bind the resulting principal. mTLS secures service
 connections, and user JWTs authenticate users. User handlers require the identity and pass it to
 the owning use case for authorization. Internal operations accept business input directly.
 

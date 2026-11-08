@@ -74,7 +74,6 @@ business input and enforce domain invariants.
 | Package | Adds |
 | --- | --- |
 | [swift-authentication-jwt](https://github.com/swift-microservices/swift-authentication-jwt) | `JWTAuthenticator` and `JWTIssuer`: a bearer token as a JSON Web Token, on jwt-kit |
-| [swift-authentication-vapor](https://github.com/swift-microservices/swift-authentication-vapor) | `BearerAuthenticationMiddleware`: proves a Vapor request's bearer token and binds the principal |
 | [swift-authentication-hummingbird](https://github.com/swift-microservices/swift-authentication-hummingbird) | `BearerAuthenticationMiddleware`: the same for Hummingbird, on hummingbird-auth |
 | [swift-authentication-grpc](https://github.com/swift-microservices/swift-authentication-grpc) | `BearerAuthenticationInterceptor` and `BearerPropagationInterceptor`: authenticate user RPCs and forward the token, on grpc-swift-2 |
 
@@ -140,8 +139,8 @@ struct APIKeyAuthenticator: Authenticator {
 
 Hand it to a transport, for example swift-authentication-grpc's
 `BearerAuthenticationInterceptor(authenticator: APIKeyAuthenticator(accounts: ...))`, and every
-call that presents a key runs with a `Principal<Account, String>` bound. (The Vapor and
-Hummingbird middleware additionally require the identity to fit their framework's auth types.)
+call that presents a key runs with a `Principal<Account, String>` bound. (The Hummingbird
+middleware additionally requires the identity to fit its framework's auth types.)
 
 #### Reading the caller inside a use case
 
